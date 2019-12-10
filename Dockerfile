@@ -4,7 +4,7 @@
 
 FROM registry.access.redhat.com/rhel7
 
-MAINTAINER Rich Lucente <rlucente@redhat.com>
+MAINTAINER Alan Liu <xianliu@edhat.com>
 
 LABEL vendor="Red Hat"
 LABEL version="0.1"
@@ -12,13 +12,15 @@ LABEL description="AMQ Interconnect Router"
 
 ENV QDROUTER_CONF /etc/qpid-dispatch/qdrouterd.conf
 
-RUN    yum repolist --disablerepo=* \
+RUN yum repolist --disablerepo=* \
     && yum-config-manager --disable \* > /dev/null \
     && yum-config-manager --enable rhel-7-server-rpms \
+	&& rpm -Va --nofiles --nodigest \
     && yum -y update \
     && yum -y install \
            --enablerepo=amq-interconnect-1-for-rhel-7-server-rpms \
            --enablerepo=a-mq-clients-1-for-rhel-7-server-rpms \
+		   --skip-broken \
            qpid-dispatch-router \
            qpid-dispatch-tools \
            python-qpid-proton \
